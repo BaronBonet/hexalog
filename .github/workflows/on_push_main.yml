@@ -1,0 +1,40 @@
+name: On push main
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish-python-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: get-versions
+        uses: ./.github/actions/get-versions-from-poetry
+        with:
+          working-directory: ${{ github.event.inputs.working-directory }}
+
+      - name: get-sem-version
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+
+      - name: Set version in pyproject.toml
+        shell: bash
+        run: |
+          sed -i -E '/^\[tool\.poetry\]/,/^\[/ s/version = "[^"]+"/version = "${{ inputs.version }}"/' ${{ inputs.directory-where-pyproject-toml-lives }}/pyproject.toml
+
+      - name: Build and publish to pypi
+        uses: JRubics/poetry-publish@v1.17
+        with:
+          python-version: ${{ steps.get-versions.outputs.python-version }}
+          poetry-version: ${{ steps.get-versions.outputs.poetry-version }}
+          pypi_token: ${{ secrets.PYPI_TOKEN }}
+          build_format: "sdist"
+          ignore_dev_requirements: "yes"

@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "python-logger"
-version = "0.1.0"
+name = "python-hex-logger"
+version = "0.0.1" # DO NOT EDIT THIS LINE MANUALLY
 description = ""
 authors = ["ericcbonet <ericcbonet@gmail.com>"]
 readme = "README.md"
-packages = [{include = "python_logger"}]
+packages = [{ include = "logger" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
