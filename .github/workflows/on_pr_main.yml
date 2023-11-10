@@ -24,11 +24,6 @@ jobs:
         with:
           working-directory: ${{ env.SOURCE_DIRECTORY }}
 
-#      - shell: bash
-#        run: |
-#          echo "${{ steps.get-versions.outputs.python-version }}"
-#          echo "${{ steps.get-versions.outputs.poetry-version }}"
-
       - uses: ./.github/actions/lint-test-python
         with:
           python-version: ${{ steps.get-versions.outputs.python-version }}
