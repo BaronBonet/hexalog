@@ -12,22 +12,28 @@ env:
   SOURCE_DIRECTORY: "."
 
 jobs:
-  version-tag:
+  tag-version:
     runs-on: ubuntu-latest
-    outputs:
-      new_tag: ${{ steps.tag_version.outputs.new_tag }}
+    permissions:
+      contents: write
+#    outputs:
+#      new_tag: ${{ steps.tag_version.outputs.new_tag }}
     steps:
-    - uses: actions/checkout@v4
-    - id: tag_version
-      uses: anothrNick/github-tag-action@1.67.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
+      - uses: actions/checkout@v3
+      - name: Bump version and push tag
+        id: tag_version
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          DEFAULT_BUMP: minor
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: false
+      - id: print_tag
+        run: echo "The new tag is ${{ steps.tag_version.outputs.new_tag }}"
 
   publish-python-package:
     runs-on: ubuntu-latest
     needs:
-      - version-tag
+      - tag-version
     steps:
       - uses: actions/checkout@v4
 
@@ -39,21 +45,22 @@ jobs:
       - name: Set version in pyproject.toml
         shell: bash
         run: |
-          sed -i -E '/^\[tool\.poetry\]/,/^\[/ s/version = "[^"]+"/version = "${{ needs.version-tag.outputs.new_tag }}"/' ${{ env.SOURCE_DIR }}/pyproject.toml
+          echo "Setting version in pyproject.toml to ${{ needs.tag-version.outputs.new_tag }}"
+          sed -i -E '/^\[tool\.poetry\]/,/^\[/ s/version = "[^"]+"/version = "${{ needs.tag-version.outputs.new_tag }}"/' pyproject.toml
 
       - name: Validate version is set in pyproject.toml
         shell: bash
         run: |
-          if ! grep -q 'version = "${{ needs.version-tag.outputs.new_tag }}"' ${{ inputs.directory-where-pyproject-toml-lives }}/pyproject.toml; then
+          if ! grep -q 'version = "${{ needs.tag-version.outputs.new_tag }}"' pyproject.toml; then
             echo "Version in pyproject.toml is not updated to ${{ inputs.version }}"
             exit 1
           fi
 
-      - name: Build and publish to pypi
-        uses: JRubics/poetry-publish@v1.17
-        with:
-          python-version: ${{ steps.get-versions.outputs.python-version }}
-          poetry-version: ${{ steps.get-versions.outputs.poetry-version }}
-          pypi_token: ${{ secrets.PYPI_TOKEN }}
-          build_format: "sdist"
-          ignore_dev_requirements: "yes"
+#      - name: Build and publish to pypi
+#        uses: JRubics/poetry-publish@v1.17
+#        with:
+#          python_version: ${{ steps.get-versions.outputs.python-version }}
+#          poetry_version: ${{ steps.get-versions.outputs.poetry-version }}
+#          pypi_token: ${{ secrets.PYPI_TOKEN }}
+#          build_format: "sdist"
+#          ignore_dev_requirements: "yes"
