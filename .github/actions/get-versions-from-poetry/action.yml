@@ -1,0 +1,25 @@
+name: Get versions from poetry
+description: Get the python and poetry versions from the pyproject.toml and poetry.lock files respectively
+
+inputs:
+  working-directory:
+    required: false
+    description: 'The directory where the pyproject.toml and poetry.lock files are located'
+
+outputs:
+  python-version:
+    description: 'Python version to install'
+    value: ${{ steps.get-versions.outputs.PYTHON_VERSION }}
+  poetry-version:
+    description: 'Poetry version to install'
+    value: ${{ steps.get-versions.outputs.POETRY_VERSION }}
+
+runs:
+  using: composite
+  steps:
+    - name: use sed to get versions
+      id: get-versions
+      shell: bash
+      run: |
+        echo "POETRY_VERSION=$(cat ${{ inputs.working-directory }}/poetry.lock | sed -n 's/^#.*Poetry \([0-9]*\.[0-9]*\.[0-9]*\).*$/\1/p' )" >> $GITHUB_OUTPUT
+        echo "PYTHON_VERSION=$(cat ${{ inputs.working-directory }}/pyproject.toml | sed -n 's/^python = "\^\(.*\)"$/\1/p')" >> $GITHUB_OUTPUT

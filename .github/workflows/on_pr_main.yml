@@ -5,9 +5,12 @@ on:
     branches:
       - main
 
-concurrently:
+concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
+
+env:
+  SOURCE_DIRECTORY: "."
 
 jobs:
   python-lint-test:
@@ -15,4 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./github/actions/lint-test-python
+
+      - uses: ./.github/actions/get-versions-from-poetry
+        id: get-versions
+        with:
+          working-directory: ${{ env.SOURCE_DIRECTORY }}
+
+      - uses: ./.github/actions/lint-test-python
+        with:
+          python-version: ${{ steps.get-versions.outputs.python-version }}
+          poetry-version: ${{ steps.get-versions.outputs.poetry-version }}
+          working-directory: ${{ env.SOURCE_DIRECTORY }}
