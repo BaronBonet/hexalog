@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class Logger(ABC):
-    """Driven port defining the interface for logging"""
+    """Driven port defining the interface for the logger"""
 
     @abstractmethod
     def debug(self, message: str, **kwargs):

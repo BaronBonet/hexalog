@@ -36,7 +36,7 @@ runs:
 
     - name: Verify Poetry dependencies
       working-directory: ${{ inputs.working-directory }}
-      run: poetry lock --check
+      run: poetry check --lock
       shell: bash
 
     - name: Load cached virtualenv

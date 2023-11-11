@@ -37,10 +37,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - id: get-versions
-        uses: ./.github/actions/get-versions-from-poetry
+      - uses: ./.github/actions/get-versions-from-poetry
+        id: get-versions
         with:
-          working-directory: ${{ github.event.inputs.working-directory }}
+          working-directory: ${{ env.SOURCE_DIRECTORY }}
 
       - name: Set version in pyproject.toml
         shell: bash
