@@ -37,9 +37,15 @@ jobs:
       - python-lint-test
     if: ${{ !cancelled() }}
     steps:
-      - name: Success
-        if: ${{ !failure() }}
-        run: exit 0
-      - name: Failure
-        if: ${{ failure() }}
-        run: exit 1
+      - name: Check if all previous steps were successful
+        # Take all the job names in the needs list and pipes them to jq to ensure that each succeeded,
+        #  if all have succeeded this passes, if not it files.
+        run: |
+          result=$(echo '${{ toJson(needs) }}' | jq 'all(.[]; .result == "success")')
+          if [ "$result" = "true" ]; then
+            echo "All jobs succeeded."
+            exit 0
+          else
+            echo "One or more jobs failed."
+            exit 1
+          fi

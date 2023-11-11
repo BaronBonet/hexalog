@@ -35,9 +35,10 @@ class ColorfulCLILogger(Logger):
         self.logger.addHandler(handler)
 
     def _log(self, level, msg, **kwargs):
-        extra_info = ", ".join([f"{k}={v}" for k, v in kwargs.items()])
-        formatted_msg = f"{msg} - {extra_info}"
-        self.logger.log(level, formatted_msg)
+        if len(kwargs) > 0:
+            extra_info = ", ".join([f"{k}={v}" for k, v in kwargs.items()])
+            msg = f"{msg} - {extra_info}"
+        self.logger.log(level, msg)
 
     def debug(self, msg: str, **kwargs):
         self._log(logging.DEBUG, msg, **kwargs)
