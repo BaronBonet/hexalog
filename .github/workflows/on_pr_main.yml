@@ -29,3 +29,17 @@ jobs:
           python-version: ${{ steps.get-versions.outputs.python-version }}
           poetry-version: ${{ steps.get-versions.outputs.poetry-version }}
           working-directory: ${{ env.SOURCE_DIRECTORY }}
+
+  ci-successful:
+    name: CI successful
+    runs-on: ubuntu-latest
+    needs:
+      - python-lint-test
+    if: ${{ !cancelled() }}
+    steps:
+      - name: Success
+        if: ${{ !failure() }}
+        run: exit 0
+      - name: Failure
+        if: ${{ failure() }}
+        run: exit 1

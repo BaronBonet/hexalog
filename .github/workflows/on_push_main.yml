@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-#    outputs:
-#      new_tag: ${{ steps.tag_version.outputs.new_tag }}
+    outputs:
+      new_tag: ${{ steps.tag_version.outputs.new_tag }}
     steps:
       - uses: actions/checkout@v3
       - name: Bump version and push tag
@@ -56,11 +56,11 @@ jobs:
             exit 1
           fi
 
-#      - name: Build and publish to pypi
-#        uses: JRubics/poetry-publish@v1.17
-#        with:
-#          python_version: ${{ steps.get-versions.outputs.python-version }}
-#          poetry_version: ${{ steps.get-versions.outputs.poetry-version }}
-#          pypi_token: ${{ secrets.PYPI_TOKEN }}
-#          build_format: "sdist"
-#          ignore_dev_requirements: "yes"
+      - name: Build and publish to pypi
+        uses: JRubics/poetry-publish@v1.17
+        with:
+          python_version: ${{ steps.get-versions.outputs.python-version }}
+          poetry_version: ${{ steps.get-versions.outputs.poetry-version }}
+          pypi_token: ${{ secrets.PYPI_TOKEN }}
+          build_format: "sdist"
+          ignore_dev_requirements: "yes"
