@@ -40,6 +40,7 @@ jobs:
       - uses: ./.github/actions/get-versions-from-poetry
         id: get-versions
         with:
+          poetry-version: ${{ steps.get-versions.outputs.poetry-version }}
           working-directory: ${{ env.SOURCE_DIRECTORY }}
 
       - name: Set version in pyproject.toml
@@ -56,11 +57,49 @@ jobs:
             exit 1
           fi
 
-      - name: Build and publish to pypi
-        uses: JRubics/poetry-publish@v1.17
+      - name: Install python
+        uses: actions/setup-python@v4
         with:
-          python_version: ${{ steps.get-versions.outputs.python-version }}
-          poetry_version: ${{ steps.get-versions.outputs.poetry-version }}
-          pypi_token: ${{ secrets.PYPI_TOKEN }}
-          build_format: "sdist"
-          ignore_dev_requirements: "yes"
+          python-version: ${{ steps.get-versions.outputs.python-version }}
+
+      - name: Load cached poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/
+          key: poetry-cache-${{ steps.setup-python.outputs.python-version }}-${{ inputs.poetry-version }}
+
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ inputs.poetry-version }}
+          virtualenvs-in-project: true
+
+      - name: Load cached virtualenv
+        id: cached-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles(format('{0}/poetry.lock', inputs.poetry-version)) }}
+          restore-keys: |
+            venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-
+
+      - name: Install build dependencies
+        if: steps.cached-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --without dev --sync
+
+      - name: Build package
+        run: poetry build
+
+      - name: Publish to pypi
+        uses: pypa/gh-action-pypi-publish@v1.8.10
+        with:
+          password: ${{ secrets.PYPI_TOKEN }}
+
+#      - name: Build and publish to pypi
+#        uses: JRubics/poetry-publish@v1.17
+#        with:
+#          python_version: ${{ steps.get-versions.outputs.python-version }}
+#          poetry_version: ${{ steps.get-versions.outputs.poetry-version }}
+#          pypi_token: ${{ secrets.PYPI_TOKEN }}
+#          build_format: "sdist"
+#          ignore_dev_requirements: "yes"
