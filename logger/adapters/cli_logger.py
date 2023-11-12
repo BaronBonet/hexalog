@@ -12,7 +12,7 @@ class ColorfulCLIHandler(logging.StreamHandler):
         "INFO": "\033[32m",  # Green
         "WARNING": "\033[33m",  # Yellow
         "ERROR": "\033[31m",  # Red
-        "FATAL": "\033[41m",  # Background Red
+        "CRITICAL": "\033[41m",  # Background Red
         "ENDC": "\033[0m",  # Reset
     }
 

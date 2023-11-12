@@ -29,9 +29,7 @@ PROCESSORS = [
 
 
 class StructLogger(Logger):
-    def __init__(self, noisy_logs: list[str] = None):
-        log_level = logging.INFO
-
+    def __init__(self, noisy_logs: list[str] = None, log_level=logging.INFO):
         structlog.configure(
             wrapper_class=structlog.stdlib.BoundLogger,
             context_class=dict,
