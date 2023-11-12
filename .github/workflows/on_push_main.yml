@@ -40,7 +40,6 @@ jobs:
       - uses: ./.github/actions/get-versions-from-poetry
         id: get-versions
         with:
-          poetry-version: ${{ steps.get-versions.outputs.poetry-version }}
           working-directory: ${{ env.SOURCE_DIRECTORY }}
 
       - name: Set version in pyproject.toml
