@@ -5,7 +5,7 @@ from inspect import currentframe, getframeinfo
 import structlog
 from structlog import get_logger
 
-from logger.ports import Logger
+from hexalog.ports import Logger
 
 
 def add_caller_logger_name(logger, method_name, event_dict):

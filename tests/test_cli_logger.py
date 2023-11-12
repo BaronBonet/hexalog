@@ -2,9 +2,9 @@ import logging
 
 import pytest
 
-from logger.adapters.cli_logger import ColorfulCLILogger
+from hexalog.adapters.cli_logger import ColorfulCLILogger
 
-_PATH_TO_COLORFUL_CLI_LOGGER = "logger.adapters.cli_logger.ColorfulCLILogger._log"
+_PATH_TO_COLORFUL_CLI_LOGGER = "hexalog.adapters.cli_logger.ColorfulCLILogger._log"
 
 _KWARGS = {"foo": "bar"}
 

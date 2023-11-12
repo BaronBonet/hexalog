@@ -1,6 +1,6 @@
 import pytest
 
-from logger.adapters.logger_for_tests import LoggerForTests
+from hexalog.adapters.logger_for_tests import LoggerForTests
 
 _KWARGS = {"foo": "bar"}
 

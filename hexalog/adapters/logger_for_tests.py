@@ -1,4 +1,4 @@
-from logger.ports import Logger
+from hexalog.ports import Logger
 
 
 class LoggerForTests(Logger):

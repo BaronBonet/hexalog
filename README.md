@@ -23,7 +23,7 @@ From development environments hexalog wraps the standard library `logging` modul
 If you have some service or adapter then make the logger port a dependency of that class:
 
 ```python
-from hexalog.logger.ports import Logger
+from hexalog.ports import Logger
 
 class SomeService:
     def __init__(self, logger: Logger):
@@ -38,8 +38,8 @@ Then in your entrypoint to the application where you wire up your dependencies y
 ```python
 import os
 
-from someservice import SomeService
-from hexalog.logger.adapters.struct_logger import StructLogger
+from some_service import SomeService
+from hexalog.adapters.struct_logger import StructLogger
 
 log_level = os.getenv("LOG_LEVEL", "DEBUG")
 

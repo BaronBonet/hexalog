@@ -1,5 +1,5 @@
 from examples.service import Service
-from logger.adapters.cli_logger import ColorfulCLILogger
+from hexalog.adapters.cli_logger import ColorfulCLILogger
 
 
 def main():

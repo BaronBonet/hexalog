@@ -1,5 +1,5 @@
 from examples.service import Service
-from logger.adapters.struct_logger import StructLogger
+from hexalog.adapters.struct_logger import StructLogger
 
 
 def main():

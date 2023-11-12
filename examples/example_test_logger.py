@@ -8,7 +8,7 @@ or you can use the contains_log method to check if a log was called.
 import pytest
 
 from examples.service import Service
-from logger.adapters.logger_for_tests import LoggerForTests
+from hexalog.adapters.logger_for_tests import LoggerForTests
 
 
 def test_logging():

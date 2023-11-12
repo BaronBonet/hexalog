@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from logger.ports import Logger
+from hexalog.ports import Logger
 
 
 class ColorfulCLIHandler(logging.StreamHandler):

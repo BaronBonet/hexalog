@@ -4,7 +4,7 @@ version = "0.0.1" # DO NOT EDIT THIS LINE MANUALLY
 description = "HexaLog is a logging port and set of opinionated adapters meant to simplify using a logger in a hexagonal architecture."
 authors = ["ericcbonet <ericcbonet@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "logger" }]
+packages = [{ include = "hexalog" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"

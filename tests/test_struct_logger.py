@@ -1,8 +1,8 @@
 import pytest
 
-from logger.adapters.struct_logger import StructLogger
+from hexalog.adapters.struct_logger import StructLogger
 
-_PATH_TO_STRUCT_LOGGER = "logger.adapters.struct_logger.get_logger"
+_PATH_TO_STRUCT_LOGGER = "hexalog.adapters.struct_logger.get_logger"
 
 _KWARGS = {"foo": "bar"}
 
